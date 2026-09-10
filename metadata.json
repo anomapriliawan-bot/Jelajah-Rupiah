@@ -1,6 +1,6 @@
 {
-  "name": "Jelajah CBP Rupiah Admin Mendekati Finish",
-  "description": "Aplikasi edukasi interaktif dan gamifikasi Cinta, Bangga, dan Paham Rupiah untuk anak dan pelajar Indonesia.",
+  "name": "Remix Jelajah CBP Rupiah",
+  "description": "Aplikasi edukasi interaktif Cinta, Bangga, dan Paham Rupiah",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

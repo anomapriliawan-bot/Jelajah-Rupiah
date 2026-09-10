@@ -107,6 +107,44 @@ async function startServer() {
     }
   });
 
+  // Permanently save custom default mission & curriculum master
+  app.post('/api/set-system-default', async (req: Request, res: Response) => {
+    try {
+      const data = req.body;
+      if (!data || !data.missions || !Array.isArray(data.missions)) {
+        return res.status(400).json({ error: 'Data payload tidak valid (wajib menyertakan array missions)' });
+      }
+
+      const targetPath = path.join(process.cwd(), 'src', 'data', 'customDefaultMaster.json');
+      await fs.promises.writeFile(targetPath, JSON.stringify(data, null, 2), 'utf-8');
+
+      console.log(`[System Default] Sukses menyimpan ${data.missions.length} misi sebagai default permanen sistem.`);
+      return res.json({
+        success: true,
+        missionsCount: data.missions.length,
+        lessonsCount: data.lessons?.length || 0,
+        questionsCount: data.practiceQuestions?.length || 0,
+      });
+    } catch (err: any) {
+      console.error('[System Default Error]', err);
+      return res.status(500).json({ error: err.message || 'Gagal menyimpan default sistem ke file server' });
+    }
+  });
+
+  // Get current system default
+  app.get('/api/system-default', async (_req: Request, res: Response) => {
+    try {
+      const targetPath = path.join(process.cwd(), 'src', 'data', 'customDefaultMaster.json');
+      if (fs.existsSync(targetPath)) {
+        const content = await fs.promises.readFile(targetPath, 'utf-8');
+        return res.json(JSON.parse(content));
+      }
+      return res.json(null);
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
   // Vite middleware setup
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
